@@ -22,7 +22,7 @@
       description: "Screeps Server Image"
       label: "Screeps Server Image"
       required: true
-      default: "ags131/screeps-server:latest"
+      default: "dafire/screeps-server:2.2.1"
       type: "string"
 screeps-balance:
   load_balancer_config:
@@ -34,7 +34,7 @@ screeps-balance:
     healthy_threshold: 2
     response_timeout: 2000
 backend-static:
-  scale: 2
+  scale: 1
   health_check:
     port: 80
     interval: 2000
@@ -45,7 +45,7 @@ backend-static:
     request_line: GET "/" "HTTP/1.0"
     healthy_threshold: 2
 backend:
-  scale: 2
+  scale: 1
 screeps-balance-cli:
   load_balancer_config:
     haproxy_config: {}
@@ -56,14 +56,10 @@ screeps-balance-cli:
     strategy: recreate
     response_timeout: 2000
     healthy_threshold: 2
-processor2:
-  scale: 8
-processor1:
-  scale: 8
-runner1:
-  scale: 8
-runner2:
-  scale: 6
+processor:
+  scale: 4
+runner:
+  scale: 4
 main:
   scale: 1
 storage:

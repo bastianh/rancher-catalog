@@ -23,7 +23,7 @@ backend:
   environment:
     STEAM_KEY: ${STEAM_KEY}
     STORAGE_HOST: storage
-    MODFILE: /screeps/mods/mods.json
+    MODFILE: /screeps/mods.json
   labels:
     io.rancher.container.pull_image: always
   tty: true
@@ -42,7 +42,7 @@ screeps-balance-cli:
   tty: true
   image: rancher/load-balancer-service
   stdin_open: true
-processor2:
+processor:
   environment:
     STORAGE_HOST: storage
     DRIVER_MODULE: '@screeps/driver'
@@ -55,32 +55,7 @@ processor2:
   - storage:storage
   volumes:
   - ${DIRECTORY}:/screeps
-processor1:
-  environment:
-    STORAGE_HOST: storage
-    DRIVER_MODULE: '@screeps/driver'
-  labels:
-    io.rancher.container.pull_image: always
-  command:
-  - screeps-engine-processor
-  image: ${SCREEPS_IMAGE}
-  links:
-  - storage:storage
-  volumes:
-  - ${DIRECTORY}:/screeps
-runner1:
-  environment:
-    STORAGE_HOST: storage
-  labels:
-    io.rancher.container.pull_image: always
-  command:
-  - screeps-engine-runner
-  image: ${SCREEPS_IMAGE}
-  links:
-  - storage:storage
-  volumes:
-  - ${DIRECTORY}:/screeps
-runner2:
+runner:
   environment:
     STORAGE_HOST: storage
   labels:

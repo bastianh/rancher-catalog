@@ -1,0 +1,117 @@
+screeps-balance:
+  ports:
+  - 21025:21025
+  labels:
+    io.rancher.loadbalancer.target.backend-static: /assets=80
+    io.rancher.scheduler.global: 'true'
+    io.rancher.loadbalancer.target.client-static: /client=80
+  tty: true
+  image: rancher/load-balancer-service
+  links:
+  - backend-static:backend-static
+  - backend:backend
+  stdin_open: true
+backend-static:
+  labels:
+    io.rancher.container.pull_image: always
+  tty: true
+  image: nginx
+  volumes:
+  - ${DIRECTORY}/assets:/usr/share/nginx/html/assets:ro
+  stdin_open: true
+backend:
+  environment:
+    STEAM_KEY: ${STEAM_KEY}
+    STORAGE_HOST: storage
+    MODFILE: /screeps/mods/mods.json
+  labels:
+    io.rancher.container.pull_image: always
+  tty: true
+  command:
+  - screeps-backend
+  image: ${SCREEPS_IMAGE}
+  links:
+  - storage:storage
+  volumes:
+  - ${DIRECTORY}:/screeps
+screeps-balance-cli:
+  ports:
+  - 21026:21026/tcp
+  labels:
+    io.rancher.scheduler.global: 'true'
+  tty: true
+  image: rancher/load-balancer-service
+  stdin_open: true
+processor2:
+  environment:
+    STORAGE_HOST: storage
+    DRIVER_MODULE: '@screeps/driver'
+  labels:
+    io.rancher.container.pull_image: always
+  command:
+  - screeps-engine-processor
+  image: ${SCREEPS_IMAGE}
+  links:
+  - storage:storage
+  volumes:
+  - ${DIRECTORY}:/screeps
+processor1:
+  environment:
+    STORAGE_HOST: storage
+    DRIVER_MODULE: '@screeps/driver'
+  labels:
+    io.rancher.container.pull_image: always
+  command:
+  - screeps-engine-processor
+  image: ${SCREEPS_IMAGE}
+  links:
+  - storage:storage
+  volumes:
+  - ${DIRECTORY}:/screeps
+runner1:
+  environment:
+    STORAGE_HOST: storage
+  labels:
+    io.rancher.container.pull_image: always
+  command:
+  - screeps-engine-runner
+  image: ${SCREEPS_IMAGE}
+  links:
+  - storage:storage
+  volumes:
+  - ${DIRECTORY}:/screeps
+runner2:
+  environment:
+    STORAGE_HOST: storage
+  labels:
+    io.rancher.container.pull_image: always
+  command:
+  - screeps-engine-runner
+  image: ${SCREEPS_IMAGE}
+  links:
+  - storage:storage
+  volumes:
+  - ${DIRECTORY}:/screeps
+main:
+  environment:
+    STORAGE_HOST: storage
+  labels:
+    io.rancher.container.pull_image: always
+  command:
+  - screeps-engine-main
+  image: ${SCREEPS_IMAGE}
+  links:
+  - storage:storage
+  volumes:
+  - ${DIRECTORY}:/screeps
+storage:
+  environment:
+    STORAGE_HOST: 0.0.0.0
+    MODFILE: mods/mods.json
+  labels:
+    io.rancher.container.pull_image: always
+  command:
+  - screeps-storage
+  image: ${SCREEPS_IMAGE}
+  volumes:
+  - ${DIRECTORY}:/screeps

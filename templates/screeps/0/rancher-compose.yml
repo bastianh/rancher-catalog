@@ -1,0 +1,70 @@
+
+.catalog:
+  name: "screeps"
+  version: "2.2.1"
+  description: "screeps server"
+  uuid: screeps
+  minimum_rancher_version: v0.51.0
+  questions:
+    - variable: "STEAM_KEY"
+      description: "Steam Key from https://steamcommunity.com/login/home/?goto=%2Fdev%2Fapikey"
+      label: "Steam Api Key"
+      required: true
+      default: ""
+      type: "string"
+    - variable: "DIRECTORY"
+      description: "Storage Directory"
+      label: "Storage Directory"
+      required: true
+      default: "/screeps"
+      type: "string"
+    - variable: "SCREEPS_IMAGE"
+      description: "Screeps Server Image"
+      label: "Screeps Server Image"
+      required: true
+      default: "ags131/screeps-server:latest"
+      type: "string"
+screeps-balance:
+  load_balancer_config:
+    haproxy_config: {}
+  health_check:
+    port: 42
+    interval: 2000
+    unhealthy_threshold: 3
+    healthy_threshold: 2
+    response_timeout: 2000
+backend-static:
+  scale: 2
+  health_check:
+    port: 80
+    interval: 2000
+    initializing_timeout: 60000
+    unhealthy_threshold: 3
+    strategy: recreate
+    response_timeout: 2000
+    request_line: GET "/" "HTTP/1.0"
+    healthy_threshold: 2
+backend:
+  scale: 2
+screeps-balance-cli:
+  load_balancer_config:
+    haproxy_config: {}
+  health_check:
+    port: 42
+    interval: 2000
+    unhealthy_threshold: 3
+    strategy: recreate
+    response_timeout: 2000
+    healthy_threshold: 2
+processor2:
+  scale: 8
+processor1:
+  scale: 8
+runner1:
+  scale: 8
+runner2:
+  scale: 6
+main:
+  scale: 1
+storage:
+  scale: 1

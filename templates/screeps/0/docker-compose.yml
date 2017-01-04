@@ -82,7 +82,7 @@ main:
 storage:
   environment:
     STORAGE_HOST: 0.0.0.0
-    MODFILE: mods/mods.json
+    MODFILE: /screeps/mods.json
   labels:
     io.rancher.container.pull_image: always
   command:

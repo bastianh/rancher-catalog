@@ -46,6 +46,7 @@ processor:
   environment:
     STORAGE_HOST: storage
     DRIVER_MODULE: '@screeps/driver'
+    MODFILE: /screeps/mods.json
   labels:
     io.rancher.container.pull_image: always
   command:
@@ -58,6 +59,7 @@ processor:
 runner:
   environment:
     STORAGE_HOST: storage
+    MODFILE: /screeps/mods.json
   labels:
     io.rancher.container.pull_image: always
   command:
@@ -70,6 +72,7 @@ runner:
 main:
   environment:
     STORAGE_HOST: storage
+    MODFILE: /screeps/mods.json
   labels:
     io.rancher.container.pull_image: always
   command:

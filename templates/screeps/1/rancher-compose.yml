@@ -1,7 +1,7 @@
 
 .catalog:
   name: "screeps"
-  version: "2.2.1"
+  version: "2.2.1a"
   description: "screeps server"
   uuid: screeps
   minimum_rancher_version: v0.51.0
@@ -57,9 +57,9 @@ screeps-balance-cli:
     response_timeout: 2000
     healthy_threshold: 2
 processor:
-  scale: 4
+  scale: 2
 runner:
-  scale: 4
+  scale: 2
 main:
   scale: 1
 storage:
